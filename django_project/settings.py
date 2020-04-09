@@ -109,12 +109,17 @@ LOCALE_PATHS = [
     os.path.join(BASE_DIR, 'locale')
 ]
 
-# Static Files
+# --------------------------------------------------------- Static --------------------------------------------------- #
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 # The absolute path to the directory where ./manage.py collectstatic will collect static files for deployment
 # STATIC_ROOT = ''
 
-# Media Files
+# --------------------------------------------------------- Media ---------------------------------------------------- #
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+# ---------------------------------------------------- Login / Logout ------------------------------------------------ #
+LOGIN_URL = '/login'
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/login'
