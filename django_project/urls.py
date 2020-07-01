@@ -9,9 +9,15 @@ from django_project import settings
 urlpatterns = i18n_patterns(
     path('jsi18n/', JavaScriptCatalog.as_view(), name='javascript-catalog'),
     path('admin/', admin.site.urls),
-    path('', include('money2food.urls')),
-    prefix_default_language=False
+    # path('', include('myapp.urls')),
+    # prefix_default_language=False
 )
+
+urlpatterns += [
+    # Django's 'set_language' view, for the language switcher redirection
+    path('i18n/', include('django.conf.urls.i18n')),
+]
+
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

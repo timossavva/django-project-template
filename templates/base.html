@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Doppler</title>
+
+    {% load static %}
+    {% load i18n %}
+
+    {% get_current_language as CURRENT_LANGUAGE_CODE %}
+    {% get_available_languages as LANGUAGES %}
+    {% get_language_info_list for LANGUAGES as languages %}
+
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+
+    <script type="text/javascript" src="{% static "plugins/jquery-3.2.1.min.js" %}"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+
+    {#    <link rel="stylesheet" href="{% static "plugins/bootstrap-4.4.1/bootstrap.css" %}">#}
+    {#    <script type="text/javascript" src="{% static "/plugins/bootstrap-4.4.1/bootstrap.min.js" %}"></script>#}
+
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'plugins/materialize/materialize.min.css' %}">
+    <script src="{% static 'plugins/materialize/materialize_hacked.js' %}"></script>
+
+    <script type="text/javascript" src="{% static "base/js/base_init.js" %}?v={% now "U" %}"></script>
+    <script type="text/javascript" src="{% static "base/js/general_functions.js" %}?v={% now "U" %}"></script>
+
+    <script type="text/javascript" src="{% url 'javascript-catalog' %}"></script>
+
+    <style type="text/css">
+
+        html {
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            -khtml-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            -o-user-select: none;
+            user-select: none;
+        }
+
+
+    </style>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+        });
+    </script>
+    {% block head_content %}{% endblock %}
+
+</head>
+<body>
+
+<input type="hidden" value="{{ CURRENT_LANGUAGE_CODE }}" id="current-lang">
+{# Language Switcher #}
+<form id="langchangeform" action="{% url 'set_language' %}" method="post">{% csrf_token %}
+    <input name="next" type="hidden" value="{{ request.get_full_path|slice:'3:' }}"/>
+    <input id="lang-code-switch" name="language" type="hidden" value="">
+</form>
+
+{% block content %}{% endblock %}
+
+</body>
+</html>
