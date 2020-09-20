@@ -24,7 +24,7 @@ INSTALLED_APPS = [
     # Third party
     #
     # Mine
-    #
+    'inventory'
 ]
 
 MIDDLEWARE = [
