@@ -101,7 +101,7 @@ LANGUAGES = [
     ('el', _('Greek')),
     ('de', _('German')),
 ]
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Europe/Athens'
 USE_I18N = True
 USE_L10N = True
 USE_TZ = True
