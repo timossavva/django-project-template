@@ -64,9 +64,9 @@ WSGI_APPLICATION = 'django_project.wsgi.application'
 # DATABASES = {
 #     'default': {
 #         'ENGINE': 'django.db.backends.mysql',
-#         'NAME': 'dynaconfdb',
-#         'USER': 'dynaconfuser',
-#         'PASSWORD': '~tyt/R3-V8~>)Fauqfv%de',
+#         'NAME': 'db_name',
+#         'USER': 'db_user',
+#         'PASSWORD': 'db_password',
 #         'PORT': '3306',
 #     }
 # }
