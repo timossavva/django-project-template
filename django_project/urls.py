@@ -16,6 +16,7 @@ urlpatterns = i18n_patterns(
 urlpatterns += [
     # Django's 'set_language' view, for the language switcher redirection
     path('i18n/', include('django.conf.urls.i18n')),
+    # Include here any URLs that you don't want to be parsed through `i18n_patterns` function.
 ]
 
 if settings.DEBUG:
