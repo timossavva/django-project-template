@@ -124,5 +124,68 @@ LOGIN_URL = '/login'
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/login'
 
+# ------------------------------------------------------- Logger ----------------------------------------------------- #
+MC_LOGGER_FILE = 'path/to/local/log/file.txt'
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '{levelname} {asctime} {module} {message}',
+            'style': '{',
+        },
+        'simple': {
+            'format': '{levelname} {message}',
+            'style': '{',
+        },
+    },
+    'filters': {
+        'require_debug_true': {
+            '()': 'django.utils.log.RequireDebugTrue',
+        },
+    },
+    'handlers': {
+        # Include the default Django email handler for errors
+        # This is what you'd get without configuring logging at all.
+        'mail_admins': {
+            'level': 'ERROR',
+            'class': 'django.utils.log.AdminEmailHandler',
+            'email_backend': 'django.core.mail.backends.smtp.EmailBackend',
+            'include_html': True,
+        },
+        'file': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': MC_LOGGER_FILE,
+            'formatter': 'verbose',
+            'encoding': 'utf8',  # this fixes UnicodeEncodeError
+        },
+        'console': {
+            'level': 'DEBUG',
+            'filters': ['require_debug_true'],
+            'class': 'logging.StreamHandler',
+            'formatter': 'simple',
+        },
+    },
+    'loggers': {
+        # Default Django configuration to email unhandled exceptions
+        'django.request': {
+            'handlers': [
+                'console',
+                'mail_admins'
+            ],
+            'level': 'ERROR',
+            'propagate': False,
+        },
+        # All INFO level messages (or higher) will be logged to the file.
+        # ERROR and CRITICAL messages will also be sent via email.
+        'wlb': {
+            'handlers': ['file', 'console'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+    },
+}
+
 # ----------------------------------------------- Django Specific Settings ------------------------------------------- #
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
