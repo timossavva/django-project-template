@@ -24,7 +24,7 @@ INSTALLED_APPS = [
     # Third party
     #
     # Mine
-    #
+    'core'
 ]
 
 MIDDLEWARE = [
@@ -111,9 +111,8 @@ LOCALE_PATHS = [
 
 # Static Files
 STATIC_URL = '/static/'
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
-# The absolute path to the directory where ./manage.py collectstatic will collect static files for deployment
-# STATIC_ROOT = ''
+# The absolute path to the directory where `manage.py collectstatic` will collect static files for deployment.
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 # Media Files
 MEDIA_URL = '/media/'

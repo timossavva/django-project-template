@@ -1,5 +1,7 @@
-# Logs
-logs/*
+# Project specific
+/logs/
+/media/
+/static/
 
 # Idea
 /.idea/
