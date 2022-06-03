@@ -1,6 +1,10 @@
 import os
+import environ
 
 from django.utils.translation import ugettext_lazy as _
+
+env = environ.Env()
+env.read_env('.env')
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -11,7 +15,7 @@ SECRET_KEY = '%ec(5!-$w1@p$c9hxx$kh4#brndur#0z%v8klxb#4t(hkud9c='
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 # Application definition
 INSTALLED_APPS = [
@@ -64,10 +68,11 @@ WSGI_APPLICATION = 'django_project.wsgi.application'
 # DATABASES = {
 #     'default': {
 #         'ENGINE': 'django.db.backends.mysql',
-#         'NAME': 'db_name',
-#         'USER': 'db_user',
-#         'PASSWORD': 'db_password',
-#         'PORT': '3306',
+#         'NAME': env('DB_NAME'),
+#         'HOST': env('DB_HOST'),
+#         'USER': env('DB_USER'),
+#         'PASSWORD': env('DB_PASSWORD'),
+#         'PORT': env('DB_PORT'),
 #     }
 # }
 # Or the default sqlite
@@ -99,7 +104,6 @@ LANGUAGE_CODE = 'en'
 LANGUAGES = [
     ('en', _('English')),
     ('el', _('Greek')),
-    ('de', _('German')),
 ]
 TIME_ZONE = 'Europe/Athens'
 USE_I18N = True
@@ -109,22 +113,40 @@ LOCALE_PATHS = [
     os.path.join(BASE_DIR, 'locale')
 ]
 
-# Static Files
+# --------------------------------------------------------- Static --------------------------------------------------- #
 STATIC_URL = '/static/'
-# The absolute path to the directory where `manage.py collectstatic` will collect static files for deployment.
+# The absolute path to the directory where ./manage.py collectstatic will collect static files for deployment.
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
-# Media Files
+# --------------------------------------------------------- Media ---------------------------------------------------- #
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+# -------------------------------------------------------- Session --------------------------------------------------- #
+# Age of cookie, in seconds (default: 2 weeks).
+SESSION_COOKIE_AGE = 60 * 60 * 24 * 7 * 2
 
 # ---------------------------------------------------- Login / Logout ------------------------------------------------ #
 LOGIN_URL = '/login'
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/login'
 
+# ---------------------------------------------------- Email Settings ------------------------------------------------ #
+# Django email backend settings
+# EMAIL_HOST = 'example.com'
+# EMAIL_PORT = 465
+# EMAIL_HOST_USER = 'info@example.com'
+# EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
+# EMAIL_USE_TLS = False
+# EMAIL_USE_SSL = True
+# ADMINS = [('Example', 'info@example.com')]
+
 # ------------------------------------------------------- Logger ----------------------------------------------------- #
-MC_LOGGER_FILE = 'path/to/local/log/file.txt'
+TEST_LOG_FILE_PATH = os.path.join(BASE_DIR, 'logs', 'test.dev')
+# Create dirs if they not exist.
+os.makedirs(os.path.dirname(TEST_LOG_FILE_PATH), exist_ok=True)
+U_LOGFILE_SIZE = 5 * 1024 * 1024
+U_LOGFILE_COUNT = 2
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
@@ -154,9 +176,10 @@ LOGGING = {
         },
         'file': {
             'level': 'DEBUG',
-            'class': 'logging.FileHandler',
-            'filename': MC_LOGGER_FILE,
-            'formatter': 'verbose',
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': TEST_LOG_FILE_PATH,
+            'maxBytes': U_LOGFILE_SIZE,
+            'backupCount': U_LOGFILE_COUNT,
             'encoding': 'utf8',  # this fixes UnicodeEncodeError
         },
         'console': {
@@ -169,22 +192,28 @@ LOGGING = {
     'loggers': {
         # Default Django configuration to email unhandled exceptions
         'django.request': {
-            'handlers': [
-                'console',
-                'mail_admins'
-            ],
+            'handlers': ['console', 'mail_admins'],
             'level': 'ERROR',
             'propagate': False,
         },
-        # All INFO level messages (or higher) will be logged to the file.
-        # ERROR and CRITICAL messages will also be sent via email.
-        'wlb': {
-            'handlers': ['file', 'console'],
+        'test': {
+            'handlers': ['file', 'console', 'mail_admins'],
             'level': 'DEBUG',
             'propagate': True,
         },
+        # You can log to the test logger using this function. This function will log the error to the `console`, to the
+        # `file` and will send email with the error to the `mail_admins`.
+        # log_message_to_logger(
+        #     'error',
+        #     'test',
+        #     "We had an error while trying to execute...."
+        #     "Error: {}".format(traceback.format_exc())
+        # )
     },
 }
 
 # ----------------------------------------------- Django Specific Settings ------------------------------------------- #
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
+# DATA_UPLOAD_MAX_NUMBER_FIELDS = 10000
+
+# ---------------------------------------------------- Other Settings ------------------------------------------------ #

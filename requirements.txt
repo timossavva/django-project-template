@@ -1,2 +1,2 @@
-django
-gunicorn
+Django==3.2.12
+django-environ==0.8.1
